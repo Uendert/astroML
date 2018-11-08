@@ -243,7 +243,7 @@ def bootstrap_two_point(data, bins, Nbootstrap=10,
         return corr, corr_err
 
 
-def two_point_angular(ra, dec, bins, method='standard', random_state=None):
+def two_point_angular(ra, dec, bins, n_random=2, method='standard', random_state=None):
     """Angular two-point correlation function
 
     A separate function is needed because angular distances are not
@@ -259,6 +259,8 @@ def two_point_angular(ra, dec, bins, method='standard', random_state=None):
     bins : array_like
         bins within which to compute the 2-point correlation.
         shape = Nbins + 1
+    n_random : integer
+        multiple number of the random catalogue
     method : string
         "standard" or "landy-szalay".
     random_state : integer, np.random.RandomState, or None
@@ -290,7 +292,7 @@ def two_point_angular(ra, dec, bins, method='standard', random_state=None):
     # draw a random sample with N points
     ra_R, dec_R = uniform_sphere((min(ra), max(ra)),
                                  (min(dec), max(dec)),
-                                 2 * len(ra))
+                                 n_random * len(ra))
 
     data = np.asarray(ra_dec_to_xyz(ra, dec), order='F').T
     data_R = np.asarray(ra_dec_to_xyz(ra_R, dec_R), order='F').T
@@ -302,7 +304,7 @@ def two_point_angular(ra, dec, bins, method='standard', random_state=None):
                      data_R=data_R, random_state=rng)
 
 
-def bootstrap_two_point_angular(ra, dec, bins, method='standard',
+def bootstrap_two_point_angular(ra, dec, bins, n_random=2, method='standard',
                                 Nbootstraps=10, random_state=None):
     """Angular two-point correlation function
 
@@ -319,6 +321,8 @@ def bootstrap_two_point_angular(ra, dec, bins, method='standard',
     bins : array_like
         bins within which to compute the 2-point correlation.
         shape = Nbins + 1
+    n_random : integer
+        multiple number of the random catalogue
     method : string
         "standard" or "landy-szalay".
     Nbootstraps : int
@@ -364,7 +368,7 @@ def bootstrap_two_point_angular(ra, dec, bins, method='standard',
         # draw a random sample with N points
         ra_R, dec_R = uniform_sphere((min(ra), max(ra)),
                                      (min(dec), max(dec)),
-                                     2 * len(ra))
+                                     n_random * len(ra))
 
         data_R = np.asarray(ra_dec_to_xyz(ra_R, dec_R), order='F').T
 
